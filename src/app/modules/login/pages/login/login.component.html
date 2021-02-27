@@ -1,2 +1,26 @@
-<p-button routerLink="/registration"
-          label="Click"></p-button>
+<section class="section auth__section">
+  <div class="container">
+    <form class="form"
+          [formGroup]="">
+      <div class="p-inputgroup">
+        <span class="p-input-icon-left">
+          <i class="pi pi-user"></i>
+          <input type="text"
+                 pInputText
+                 placeholder="username">
+        </span>
+      </div>
+      <div class="p-inputgroup">
+        <span class="p-input-icon-left">
+          <i class="pi pi-lock"></i>
+          <input type="password"
+                 pPassword
+                 placeholder="password" />
+        </span>
+      </div>
+      <p-button label="Log In"></p-button>
+    </form>
+    <span>Don't you have account yet? ? <a routerLink="/registration">Register </a>
+    </span>
+  </div>
+</section>

@@ -1,1 +1,34 @@
-<p>registration works!</p>
+<section class="section auth__section">
+  <div class="container">
+    <form class="form"
+          [formGroup]="">
+      <div class="p-inputgroup">
+        <span class="p-input-icon-left">
+          <i class="pi pi-user"></i>
+          <input type="text"
+                 pInputText
+                 placeholder="username">
+        </span>
+      </div>
+      <div class="p-inputgroup">
+        <span class="p-input-icon-left">
+          <i class="pi pi-lock"></i>
+          <input type="password"
+                 pPassword
+                 placeholder="password" />
+        </span>
+      </div>
+      <div class="p-inputgroup">
+        <span class="p-input-icon-left">
+          <i class="pi pi-lock"></i>
+          <input type="password"
+                 pPassword
+                 placeholder="repeat password" />
+        </span>
+      </div>
+      <p-button label="Register"></p-button>
+    </form>
+    <span>Do you have already account ? <a routerLink="/login">Log In</a>
+    </span>
+  </div>
+</section>
