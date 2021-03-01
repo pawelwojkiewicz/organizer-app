@@ -1,0 +1,9 @@
+<ng-content select="[minlength]"
+            *ngIf="control.invalid && control.errors.minlength">
+</ng-content>
+<ng-content select="[required]"
+            *ngIf="control.invalid && control.errors.required">
+</ng-content>
+<ng-content select="[repassword]"
+            *ngIf="control.invalid && !control.errors.confirmedPassword">
+</ng-content>
