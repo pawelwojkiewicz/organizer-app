@@ -12,8 +12,7 @@
                  formControlName="username">
         </span>
       </div>
-      <app-validation *ngIf="submitted"
-                      [control]="regForm.username">
+      <app-validation [control]="regForm.username">
         <span class="invalid-message"
               minlength>Username is too short.</span>
         <span class="invalid-message"
@@ -24,12 +23,12 @@
           <i class="pi pi-lock"></i>
           <input type="password"
                  pPassword
+                 [feedback]="false"
                  placeholder="password"
                  formControlName="password" />
         </span>
       </div>
-      <app-validation *ngIf="submitted"
-                      [control]="regForm.password">
+      <app-validation [control]="regForm.password">
         <span class="invalid-message"
               minlength>Password is too short.</span>
         <span class="invalid-message"
@@ -40,16 +39,16 @@
           <i class="pi pi-lock"></i>
           <input type="password"
                  pPassword
+                 [feedback]="false"
                  placeholder="repeat password"
                  formControlName="repassword" />
         </span>
       </div>
-      <app-validation *ngIf="submitted"
-                      [control]="regForm.repassword">
+      <app-validation [control]="regForm.repassword">
         <span class="invalid-message"
               repassword>Your password and confirmation password do not match.</span>
         <span class="invalid-message"
-              required>Password is required.</span>
+              required>Confirmation password is required.</span>
       </app-validation>
       <p-button type="submit"
                 class="registration__button"
