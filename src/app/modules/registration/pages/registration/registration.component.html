@@ -8,15 +8,16 @@
           <i class="pi pi-user"></i>
           <input type="text"
                  pInputText
-                 placeholder="username"
-                 formControlName="username">
+                 placeholder="email"
+                 formControlName="email"
+                 [class.invalid-input]="emailIsValid">
         </span>
       </div>
-      <app-validation [control]="regForm.username">
+      <app-validation [control]="regForm.email">
         <span class="invalid-message"
-              minlength>Username is too short.</span>
+              required>Email is required.</span>
         <span class="invalid-message"
-              required>Username is required.</span>
+              email>Please put correct e-mail. </span>
       </app-validation>
       <div class="p-inputgroup">
         <span class="p-input-icon-left">
@@ -33,6 +34,8 @@
               minlength>Password is too short.</span>
         <span class="invalid-message"
               required>Password is required.</span>
+        <span class="invalid-message"
+              repassword>Your password and confirmation password do not match.</span>
       </app-validation>
       <div class="p-inputgroup">
         <span class="p-input-icon-left">

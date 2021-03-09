@@ -4,6 +4,12 @@
             control.errors.minlength
             ">
 </ng-content>
+<ng-content select="[email]"
+            *ngIf="
+            control.invalid &&
+            control.errors.email
+            ">
+</ng-content>
 <ng-content select="[required]"
             *ngIf="
             control.invalid &&

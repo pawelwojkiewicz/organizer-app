@@ -1,30 +1,39 @@
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef, ViewChild, ElementRef } from '@angular/core';
+import { FormGroup, FormControl, Validators, AbstractControl } from '@angular/forms';
 import { PasswordValidators } from 'ngx-validators';
+import { debounceTime } from 'rxjs/operators';
 
 @Component({
   selector: 'app-registration',
   templateUrl: './registration.component.html',
   styleUrls: ['./registration.component.scss'],
-  //changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class RegistrationComponent implements OnInit {
 
-  registrationForm: FormGroup;
+  @ViewChild('email', { read: ElementRef, static: true }) email: ElementRef;
 
-  constructor() { }
+  registrationForm: FormGroup;
+  emailIsValid = false;
+  constructor(private changeDetector: ChangeDetectorRef) { }
 
   ngOnInit(): void {
     this.initRegisterForm();
+    this.registrationForm.valueChanges.pipe(debounceTime(300)).subscribe(
+      () => {
+        console.log('value changes');
+        this.changeDetector.markForCheck();
+      }
+    );
   }
 
   initRegisterForm(): void {
     this.registrationForm = new FormGroup({
-      username: new FormControl(
+      email: new FormControl(
         null,
         [
-          Validators.required,
-          Validators.minLength(4)
+          Validators.email,
+          Validators.required
         ]
       ),
       password: new FormControl(
@@ -37,15 +46,14 @@ export class RegistrationComponent implements OnInit {
       repassword: new FormControl(
         null,
         [
-          Validators.required,
-          Validators.minLength(8),
+          Validators.required
         ]
       )
-    }, PasswordValidators.mismatchedPasswords('password', 'repassword')
+    }, PasswordValidators.mismatchedPasswords('password', 'repassword'),
     );
   }
 
-  get regForm(): { [key: string]: any } | null {
+  get regForm(): { [key: string]: AbstractControl } {
     return this.registrationForm.controls;
   }
 
@@ -55,15 +63,14 @@ export class RegistrationComponent implements OnInit {
       if (control instanceof FormControl) {
         control.markAsTouched({ onlySelf: true });
         control.markAsDirty({ onlySelf: true });
-      } else if (control instanceof FormGroup) {
-        this.validateAllFormFields(control);
+        control.updateValueAndValidity();
       }
     });
   }
 
   onRegister(): void {
     if (this.registrationForm.valid) {
-      console.log('form submitted');
+      console.log(this.registrationForm.value);
     } else {
       this.validateAllFormFields(this.registrationForm);
     }
