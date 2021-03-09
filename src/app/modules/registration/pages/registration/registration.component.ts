@@ -1,7 +1,8 @@
-import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { FormGroup, FormControl, Validators, AbstractControl } from '@angular/forms';
 import { PasswordValidators } from 'ngx-validators';
 import { debounceTime } from 'rxjs/operators';
+import { AuthService } from 'src/app/core/services/auth.service';
 
 @Component({
   selector: 'app-registration',
@@ -12,7 +13,9 @@ import { debounceTime } from 'rxjs/operators';
 export class RegistrationComponent implements OnInit {
 
   registrationForm: FormGroup;
-  constructor(private changeDetector: ChangeDetectorRef) { }
+  constructor(
+    private changeDetector: ChangeDetectorRef,
+    private authService: AuthService) { }
 
   ngOnInit(): void {
     this.initRegisterForm();
@@ -66,7 +69,13 @@ export class RegistrationComponent implements OnInit {
 
   onRegister(): void {
     if (this.registrationForm.valid) {
-      console.log(this.registrationForm.value);
+      const email = this.registrationForm.value.email;
+      const password = this.registrationForm.value.password;
+      this.authService.register(email, password).subscribe(data => {
+        console.log(data);
+      }, error => {
+        console.log(error);
+      });
     } else {
       this.validateAllFormFields(this.registrationForm);
     }
