@@ -1,17 +1,17 @@
-import { Component, OnInit, ChangeDetectionStrategy, Input, ChangeDetectorRef, OnDestroy, Output } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, Input, ChangeDetectorRef, OnDestroy } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Subscription } from 'rxjs';
-import { debounceTime } from 'rxjs/operators';
-import * as EventEmitter from 'events';
+import { UntilDestroy } from '@ngneat/until-destroy';
 
+
+@UntilDestroy({ checkProperties: true })
 @Component({
   selector: 'app-validation',
   templateUrl: './validation.component.html',
   styleUrls: ['./validation.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ValidationComponent implements OnInit, OnDestroy {
-
+export class ValidationComponent implements OnInit {
   @Input() control: FormControl;
   constructor(private changeDetector: ChangeDetectorRef) { }
 
@@ -21,9 +21,5 @@ export class ValidationComponent implements OnInit, OnDestroy {
     this.controlSub = this.control.statusChanges.subscribe(() => {
       this.changeDetector.markForCheck();
     });
-  }
-
-  ngOnDestroy(): void {
-    this.controlSub.unsubscribe();
   }
 }

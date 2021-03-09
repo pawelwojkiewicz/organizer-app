@@ -19,6 +19,7 @@
     "@angular/platform-browser": "~11.2.3",
     "@angular/platform-browser-dynamic": "~11.2.3",
     "@angular/router": "~11.2.3",
+    "@ngneat/until-destroy": "^8.0.4",
     "bootstrap": "^4.6.0",
     "ngx-validators": "^5.2.1",
     "primeicons": "^4.1.0",

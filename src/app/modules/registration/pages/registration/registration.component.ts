@@ -11,17 +11,13 @@ import { debounceTime } from 'rxjs/operators';
 })
 export class RegistrationComponent implements OnInit {
 
-  @ViewChild('email', { read: ElementRef, static: true }) email: ElementRef;
-
   registrationForm: FormGroup;
-  emailIsValid = false;
   constructor(private changeDetector: ChangeDetectorRef) { }
 
   ngOnInit(): void {
     this.initRegisterForm();
     this.registrationForm.valueChanges.pipe(debounceTime(300)).subscribe(
       () => {
-        console.log('value changes');
         this.changeDetector.markForCheck();
       }
     );
