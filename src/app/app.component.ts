@@ -1,5 +1,6 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { PrimeNGConfig } from 'primeng/api';
+import { PrimeNgService } from './core/services/prime-ng.service';
 
 @Component({
   selector: 'app-root',
@@ -8,10 +9,9 @@ import { PrimeNGConfig } from 'primeng/api';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AppComponent implements OnInit {
-  title = 'organizer-app';
-  constructor(private primengConfig: PrimeNGConfig) { }
+  constructor(private primeNgService: PrimeNgService) { }
 
   ngOnInit(): void {
-    this.primengConfig.ripple = true;
+    this.primeNgService.configInit();
   }
 }
