@@ -14,7 +14,7 @@ export class AuthService {
 
   register(email: string, password: string): Observable<RegistrationUser> {
     return this.http.post<RegistrationUser>(
-      environment.apiKey,
+      environment.registerApiUrl,
       {
         email,
         password,

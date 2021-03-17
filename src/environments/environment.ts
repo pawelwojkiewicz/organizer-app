@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  apiKey: 'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyBl7PiYrxj5G_O4PhMaGjGoC3n8-U1VvWk'
+  registerApiUrl: 'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyBl7PiYrxj5G_O4PhMaGjGoC3n8-U1VvWk'
 };
 
 /*
