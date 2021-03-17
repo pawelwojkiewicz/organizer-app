@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { ValidationComponent } from './validation.component';
+import { FormControl } from '@angular/forms';
 
 describe('ValidationComponent', () => {
   let component: ValidationComponent;
@@ -8,14 +8,16 @@ describe('ValidationComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ValidationComponent ]
+      declarations: [ValidationComponent],
     })
-    .compileComponents();
+      .compileComponents();
   });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(ValidationComponent);
     component = fixture.componentInstance;
+    const control: FormControl = new FormControl();
+    component.control = control;
     fixture.detectChanges();
   });
 
