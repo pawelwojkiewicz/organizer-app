@@ -1,0 +1,62 @@
+<section class="section auth__section">
+  <div class="container">
+    <form class="form"
+          [formGroup]="registrationForm"
+          (ngSubmit)="onRegister()">
+      <div class="p-inputgroup">
+        <span class="p-input-icon-left">
+          <i class="pi pi-user"></i>
+          <input type="text"
+                 pInputText
+                 placeholder="email"
+                 formControlName="email">
+        </span>
+      </div>
+      <app-validation [control]="regForm.email">
+        <span class="invalid-message"
+              required>Email is required.</span>
+        <span class="invalid-message"
+              email>Please put correct e-mail. </span>
+      </app-validation>
+      <div class="p-inputgroup">
+        <span class="p-input-icon-left">
+          <i class="pi pi-lock"></i>
+          <input type="password"
+                 pPassword
+                 [feedback]="false"
+                 placeholder="password"
+                 formControlName="password" />
+        </span>
+      </div>
+      <app-validation [control]="regForm.password">
+        <span class="invalid-message"
+              minlength>Password is too short.</span>
+        <span class="invalid-message"
+              required>Password is required.</span>
+        <span class="invalid-message"
+              repassword>Your password and confirmation password do not match.</span>
+      </app-validation>
+      <div class="p-inputgroup">
+        <span class="p-input-icon-left">
+          <i class="pi pi-lock"></i>
+          <input type="password"
+                 pPassword
+                 [feedback]="false"
+                 placeholder="repeat password"
+                 formControlName="repassword" />
+        </span>
+      </div>
+      <app-validation [control]="regForm.repassword">
+        <span class="invalid-message"
+              repassword>Your password and confirmation password do not match.</span>
+        <span class="invalid-message"
+              required>Confirmation password is required.</span>
+      </app-validation>
+      <p-button type="submit"
+                class="registration__button"
+                label="Register"></p-button>
+    </form>
+    <span>Do you have already account ? <a routerLink="/login">Log In</a>
+    </span>
+  </div>
+</section>
