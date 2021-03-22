@@ -78,6 +78,7 @@ export class RegistrationComponent implements OnInit {
       });
     } else {
       this.validateAllFormFields(this.registrationForm);
+      console.log(this.registrationForm);
     }
   }
 }
