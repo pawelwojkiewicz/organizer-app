@@ -13,6 +13,7 @@ import { AuthService } from 'src/app/core/services/auth.service';
 export class RegistrationComponent implements OnInit {
 
   registrationForm: FormGroup;
+  errorMessage: string;
   constructor(
     private changeDetector: ChangeDetectorRef,
     private authService: AuthService) { }
@@ -73,8 +74,8 @@ export class RegistrationComponent implements OnInit {
       const password = this.registrationForm.value.password;
       this.authService.register(email, password).subscribe(data => {
         console.log(data);
-      }, error => {
-        console.log(error);
+      }, errorStatus => {
+        this.regForm.email.setErrors(errorStatus);
       });
     } else {
       this.validateAllFormFields(this.registrationForm);
