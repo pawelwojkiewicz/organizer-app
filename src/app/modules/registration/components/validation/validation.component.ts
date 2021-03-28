@@ -21,6 +21,5 @@ export class ValidationComponent implements OnInit {
     this.controlSub = this.control.statusChanges.subscribe(() => {
       this.changeDetector.markForCheck();
     });
-
   }
 }
