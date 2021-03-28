@@ -1,42 +1,24 @@
 <section class="section auth__section">
   <div class="container">
     <form class="form"
-          [formGroup]="loginForm"
-          (ngSubmit)="onLogin()">
+          [formGroup]="">
       <div class="p-inputgroup">
         <span class="p-input-icon-left">
           <i class="pi pi-user"></i>
           <input type="text"
                  pInputText
-                 placeholder="email"
-                 formControlName="email" />
+                 placeholder="username">
         </span>
       </div>
-      <app-validation [control]="logForm.email">
-        <span class="invalid-message"
-              required>Email is required.</span>
-        <span class="invalid-message"
-              email>Please put correct e-mail. </span>
-      </app-validation>
       <div class="p-inputgroup">
         <span class="p-input-icon-left">
           <i class="pi pi-lock"></i>
           <input type="password"
                  pPassword
-                 [feedback]="false"
-                 placeholder="password"
-                 formControlName="password" />
+                 placeholder="password" />
         </span>
       </div>
-      <app-validation [control]="logForm.password">
-        <span class="invalid-message"
-              required>Password is required.</span>
-      </app-validation>
-      <p-button type="submit"
-                class="registration__button"
-                label="Login"></p-button>
+      <p-button label="Log In"></p-button>
     </form>
     <span>Don't you have account yet? ? <a routerLink="/registration">Register </a>
     </span>
-  </div>
-</section>
