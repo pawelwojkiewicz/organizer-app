@@ -1,27 +1,33 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { Spectator, createComponentFactory } from '@ngneat/spectator';
 import { ValidationComponent } from './validation.component';
-import { FormControl } from '@angular/forms';
+import { ReactiveFormsModule, FormControl, Validators } from '@angular/forms';
+import { RegistrationComponent } from '../../pages/registration/registration.component';
 
 describe('ValidationComponent', () => {
-  let component: ValidationComponent;
-  let fixture: ComponentFixture<ValidationComponent>;
-
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      declarations: [ValidationComponent],
-    })
-      .compileComponents();
+  let spectator: Spectator<ValidationComponent>;
+  const createComponent = createComponentFactory({
+    component: ValidationComponent,
+    imports: [ReactiveFormsModule],
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ValidationComponent);
-    component = fixture.componentInstance;
-    const control: FormControl = new FormControl();
-    component.control = control;
-    fixture.detectChanges();
+    const formControl: FormControl = new FormControl();
+    spectator = createComponent({
+      props: {
+        control: formControl
+      },
+    });
+    // ngOnInit?
+    spectator.component.ngOnInit();
   });
 
   it('should create', () => {
-    expect(component).toBeTruthy();
+    expect(spectator).toBeTruthy();
+  });
+
+  it('form invalid when inputs are empty', () => {
+    console.log('spec', spectator.component.control);
+    const control = spectator.component.control;
+    expect(control.errors.required).toBeTruthy();
   });
 });
