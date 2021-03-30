@@ -1,15 +1,23 @@
 import { RegistrationComponent } from './registration.component';
 import { Spectator, createComponentFactory } from '@ngneat/spectator';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { FormGroup, AbstractControl } from '@angular/forms';
 
 describe('RegistrationComponent', () => {
   let spectator: Spectator<RegistrationComponent>;
+  let form: FormGroup;
+  let control: { [key: string]: AbstractControl; };
+
   const createComponent = createComponentFactory({
     component: RegistrationComponent,
     imports: [HttpClientTestingModule]
   });
 
-  beforeEach(() => spectator = createComponent());
+  beforeEach(() => {
+    spectator = createComponent();
+    form = spectator.component.registrationForm;
+    control = spectator.component.registrationForm.controls;
+  });
 
   it('should create', () => {
     expect(spectator).toBeTruthy();
@@ -28,48 +36,37 @@ describe('RegistrationComponent', () => {
     expect(passwordInputs).toHaveAttribute('pPassword');
   });
 
-  //Empty form
+  it('form invalid when inputs are empty', () => {
+    expect(form.valid).toBeFalsy();
+    expect(control.email.valid).toBeFalsy();
+    expect(control.password.valid).toBeFalsy();
+    expect(control.repassword.valid).toBeFalsy();
+    expect(control.email.errors.required).toBeTruthy();
+    expect(control.password.errors.required).toBeTruthy();
+    expect(control.repassword.errors.required).toBeTruthy();
+  });
 
-  // it('form invalid when inputs are empty', () => {
-  //   const email = spectator.component.registrationForm.controls.email;
-  //   const password = spectator.component.registrationForm.controls.password;
-  //   const confirmPassword = spectator.component.registrationForm.controls.repassword;
-  //   expect(spectator.component.registrationForm.valid).toBeFalsy();
-  //   expect(email.valid).toBeFalsy();
-  //   expect(password.valid).toBeFalsy();
-  //   expect(confirmPassword.valid).toBeFalsy();
-  //   expect(email.errors.required).toBeTruthy();
-  //   expect(password.errors.required).toBeTruthy();
-  //   expect(confirmPassword.errors.required).toBeTruthy();
-  // });
+  it('email pattern validity when type "test"', () => {
+    let errors = {};
+    control.email.setValue('test');
+    errors = control.email.errors || {};
+    expect(errors['email']).toBeTruthy();
+    expect(control.email.valid).toBeFalsy();
+  });
 
-  //Form errors
-  // it('email pattern validity when type "test"', () => {
-  //   let errors = {};
-  //   const email = spectator.component.registrationForm.controls.email;
-  //   email.setValue('test');
-  //   errors = email.errors || {};
-  //   expect(errors['email']).toBeTruthy();
-  //   expect(email.valid).toBeFalsy();
-  // });
+  it('minlength of password validty', () => {
+    let errors = {};
+    control.password.setValue('test123');
+    errors = control.password.errors || {};
+    expect(errors['minlength']).toBeTruthy();
+    expect(control.password.valid).toBeFalsy();
+  });
 
-  // it('minlength of password validty', () => {
-  //   let errors = {};
-  //   const password = spectator.component.registrationForm.controls.password;
-  //   password.setValue('test123');
-  //   errors = password.errors || {};
-  //   expect(errors['minlength']).toBeTruthy();
-  //   expect(password.valid).toBeFalsy();
-  // });
-
-  // it('mismatched passwords validity', () => {
-  //   let errors = {};
-  //   const form = spectator.component.registrationForm;
-  //   const password = spectator.component.registrationForm.controls.password;
-  //   const confirmPassword = spectator.component.registrationForm.controls.repassword;
-  //   password.setValue('test1234');
-  //   confirmPassword.setValue('test123');
-  //   errors = form.errors || {};
-  //   expect(errors['mismatchedPasswords']).toBeTruthy();
-  // });
+  it('mismatched passwords validity', () => {
+    let errors = {};
+    control.password.setValue('test1234');
+    control.repassword.setValue('test123');
+    errors = form.errors || {};
+    expect(errors['mismatchedPasswords']).toBeTruthy();
+  });
 });

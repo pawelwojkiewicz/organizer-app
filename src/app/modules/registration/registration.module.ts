@@ -6,7 +6,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { InputTextModule } from 'primeng/inputtext';
 import { PasswordModule } from 'primeng/password';
 import { ButtonModule } from 'primeng/button';
-import { ValidationComponent } from './components/validation/validation.component';
+import { ValidationComponent } from 'src/app/shared/components/validation/validation.component';
 
 @NgModule({
   declarations: [RegistrationComponent, ValidationComponent],

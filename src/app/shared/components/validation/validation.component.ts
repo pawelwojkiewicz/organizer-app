@@ -1,10 +1,10 @@
-import { Component, OnInit, ChangeDetectionStrategy, Input, ChangeDetectorRef, OnChanges, SimpleChanges, DoCheck, AfterContentInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, Input, ChangeDetectorRef } from '@angular/core';
+import { UntilDestroy } from '@ngneat/until-destroy';
 import { FormControl } from '@angular/forms';
 import { Subscription } from 'rxjs';
-import { UntilDestroy } from '@ngneat/until-destroy';
-
 
 @UntilDestroy({ checkProperties: true })
+
 @Component({
   selector: 'app-validation',
   templateUrl: './validation.component.html',
@@ -12,6 +12,7 @@ import { UntilDestroy } from '@ngneat/until-destroy';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ValidationComponent implements OnInit {
+
   @Input() control: FormControl;
   constructor(private changeDetector: ChangeDetectorRef) { }
 
@@ -22,4 +23,5 @@ export class ValidationComponent implements OnInit {
       this.changeDetector.markForCheck();
     });
   }
+
 }
