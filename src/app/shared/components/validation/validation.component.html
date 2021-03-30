@@ -17,6 +17,18 @@
             (control.touched || control.dirty)
             ">
 </ng-content>
+<ng-content select="[emailExist]"
+            *ngIf="
+            control.invalid &&
+            control.errors.emailExist
+            ">
+</ng-content>
+<ng-content select="[unknownError]"
+            *ngIf="
+            control.invalid &&
+            control.errors.unknownError
+            ">
+</ng-content>
 <ng-content select="[repassword]"
             *ngIf="
             control.invalid &&

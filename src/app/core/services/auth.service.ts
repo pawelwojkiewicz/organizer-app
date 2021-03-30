@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
 import { RegistrationUser } from 'src/app/shared/types/registration-user.type';
-import { delay } from 'rxjs/operators';
+import { delay, catchError } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
@@ -19,6 +19,14 @@ export class AuthService {
         email,
         password,
         returnSecureToken: true
-      }).pipe(delay(2000));
+      }).pipe(catchError(errorRes => {
+        if (!errorRes.error || !errorRes.error.error) {
+          return throwError({ unknownError: true });
+        }
+        switch (errorRes.error.error.message) {
+          case 'EMAIL_EXISTS':
+            return throwError({ emailExist: true });
+        }
+      }));
   }
 }

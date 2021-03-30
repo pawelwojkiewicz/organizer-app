@@ -3,6 +3,9 @@ import { FormGroup, FormControl, Validators, AbstractControl } from '@angular/fo
 import { PasswordValidators } from 'ngx-validators';
 import { debounceTime } from 'rxjs/operators';
 import { AuthService } from 'src/app/core/services/auth.service';
+import { UntilDestroy } from '@ngneat/until-destroy';
+
+@UntilDestroy({ checkProperties: true })
 
 @Component({
   selector: 'app-registration',
@@ -13,6 +16,7 @@ import { AuthService } from 'src/app/core/services/auth.service';
 export class RegistrationComponent implements OnInit {
 
   registrationForm: FormGroup;
+  errorMessage: string;
   constructor(
     private changeDetector: ChangeDetectorRef,
     private authService: AuthService) { }
@@ -73,8 +77,8 @@ export class RegistrationComponent implements OnInit {
       const password = this.registrationForm.value.password;
       this.authService.register(email, password).subscribe(data => {
         console.log(data);
-      }, error => {
-        console.log(error);
+      }, errorStatus => {
+        this.regForm.email.setErrors(errorStatus);
       });
     } else {
       this.validateAllFormFields(this.registrationForm);
