@@ -12,11 +12,12 @@
                  formControlName="email">
         </span>
       </div>
-      <app-validation [control]="regForm.email">
-        <span class="invalid-message"
-              required>Email is required.</span>
-        <span class="invalid-message"
-              email>Please put correct e-mail. </span>
+      <app-validation class="invalid-message"
+                      [control]="regForm.email">
+        <span required>Email is required.</span>
+        <span email>Please put correct e-mail.</span>
+        <span emailExist>This email address is already being used, try another one.</span>
+        <span unknownError>An unknow error occured.</span>
       </app-validation>
       <div class="p-inputgroup">
         <span class="p-input-icon-left">
@@ -28,13 +29,11 @@
                  formControlName="password" />
         </span>
       </div>
-      <app-validation [control]="regForm.password">
-        <span class="invalid-message"
-              minlength>Password is too short.</span>
-        <span class="invalid-message"
-              required>Password is required.</span>
-        <span class="invalid-message"
-              repassword>Your password and confirmation password do not match.</span>
+      <app-validation class="invalid-message"
+                      [control]="regForm.password">
+        <span minlength>Password is too short.</span>
+        <span required>Password is required.</span>
+        <span repassword>Your password and confirmation password do not match.</span>
       </app-validation>
       <div class="p-inputgroup">
         <span class="p-input-icon-left">
@@ -46,11 +45,10 @@
                  formControlName="repassword" />
         </span>
       </div>
-      <app-validation [control]="regForm.repassword">
-        <span class="invalid-message"
-              repassword>Your password and confirmation password do not match.</span>
-        <span class="invalid-message"
-              required>Confirmation password is required.</span>
+      <app-validation class="invalid-message"
+                      [control]="regForm.repassword">
+        <span repassword>Your password and confirmation password do not match.</span>
+        <span required>Confirmation password is required.</span>
       </app-validation>
       <p-button type="submit"
                 class="registration__button"
