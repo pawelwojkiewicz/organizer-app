@@ -3,6 +3,9 @@ import { FormGroup, FormControl, Validators, AbstractControl } from '@angular/fo
 import { PasswordValidators } from 'ngx-validators';
 import { debounceTime } from 'rxjs/operators';
 import { AuthService } from 'src/app/core/services/auth.service';
+import { UntilDestroy } from '@ngneat/until-destroy';
+
+@UntilDestroy({ checkProperties: true })
 
 @Component({
   selector: 'app-registration',
