@@ -8,6 +8,9 @@ import { ValidationComponent } from './components/validation/validation.componen
   declarations: [ValidationComponent],
   imports: [
     CommonModule
+  ],
+  exports: [
+    ValidationComponent
   ]
 })
 export class SharedModule { }

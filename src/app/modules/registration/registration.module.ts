@@ -6,17 +6,18 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { InputTextModule } from 'primeng/inputtext';
 import { PasswordModule } from 'primeng/password';
 import { ButtonModule } from 'primeng/button';
-import { ValidationComponent } from 'src/app/shared/components/validation/validation.component';
+import { SharedModule } from 'src/app/shared/shared.module';
 
 @NgModule({
-  declarations: [RegistrationComponent, ValidationComponent],
+  declarations: [RegistrationComponent],
   imports: [
     CommonModule,
     RegistrationRoutingModule,
     ReactiveFormsModule,
     InputTextModule,
     PasswordModule,
-    ButtonModule
+    ButtonModule,
+    SharedModule
   ]
 })
 export class RegistrationModule { }
