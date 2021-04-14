@@ -1,6 +1,9 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { FormGroup, FormControl, Validators, AbstractControl } from '@angular/forms';
+import { AuthService } from 'src/app/core/services/auth.service';
+import { untilDestroyed, UntilDestroy } from '@ngneat/until-destroy';
 
+@UntilDestroy()
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -11,7 +14,7 @@ export class LoginComponent implements OnInit {
 
   loginForm: FormGroup;
 
-  constructor() { }
+  constructor(private authService: AuthService) { }
 
   ngOnInit(): void {
     this.initLoginForm();
@@ -55,7 +58,22 @@ export class LoginComponent implements OnInit {
     if (this.loginForm.valid) {
       const email = this.loginForm.value.email;
       const password = this.loginForm.value.password;
-      console.log(email, password);
+      this.authService.login(email, password)
+        .pipe(untilDestroyed(this))
+        .subscribe(data => {
+          console.log(data);
+        }, errorStatus => {
+          switch (errorStatus) {
+            case 'UKNOWN_ERROR':
+              this.logForm.email.setErrors({ unknownError: true });
+              break;
+            case 'EMAIL_NOT_FOUND':
+              this.logForm.email.setErrors({ emailNotFound: true });
+              break;
+            case 'INVALID_PASSWORD':
+              this.logForm.password.setErrors({ invalidPassword: true });
+          }
+        });
     } else {
       this.validateAllFormFields(this.loginForm);
     }

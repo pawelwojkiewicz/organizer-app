@@ -17,6 +17,8 @@
               required>Email is required.</span>
         <span class="invalid-message"
               email>Please put correct e-mail. </span>
+        <span class="invalid-message"
+              emailNotFound>Sorry, this email does not exist in our database.</span>
       </app-validation>
       <div class="p-inputgroup">
         <span class="p-input-icon-left">
@@ -31,6 +33,8 @@
       <app-validation [control]="logForm.password">
         <span class="invalid-message"
               required>Password is required.</span>
+        <span class="invalid-message"
+              invalidPassword>Sorry, your password is incorrect.</span>
       </app-validation>
       <p-button type="submit"
                 class="registration__button"
