@@ -51,59 +51,62 @@ describe('RegistrationComponent', () => {
     });
   });
 
-  beforeEach(() => {
-    spectator = createComponent();
-    form = spectator.component.registrationForm;
-    control = spectator.component.registrationForm.controls;
-  });
+  describe('RegistrationFormValidation', () => {
 
-  it('form invalid when inputs are empty', () => {
-    // assert
-    expect(form.valid).toBeFalsy();
-    expect(control.email.valid).toBeFalsy();
-    expect(control.password.valid).toBeFalsy();
-    expect(control.repassword.valid).toBeFalsy();
-    expect(control.email.errors.required).toBeTruthy();
-    expect(control.password.errors.required).toBeTruthy();
-    expect(control.repassword.errors.required).toBeTruthy();
-  });
+    beforeEach(() => {
+      spectator = createComponent();
+      form = spectator.component.registrationForm;
+      control = spectator.component.registrationForm.controls;
+    });
 
-  it('email pattern validity when type "test"', () => {
-    // arrange
-    let errors = {};
+    it('form invalid when inputs are empty', () => {
+      // assert
+      expect(form.valid).toBeFalsy();
+      expect(control.email.valid).toBeFalsy();
+      expect(control.password.valid).toBeFalsy();
+      expect(control.repassword.valid).toBeFalsy();
+      expect(control.email.errors.required).toBeTruthy();
+      expect(control.password.errors.required).toBeTruthy();
+      expect(control.repassword.errors.required).toBeTruthy();
+    });
 
-    // act
-    control.email.setValue('test');
-    errors = control.email.errors || {};
+    it('email pattern validity when type "test"', () => {
+      // arrange
+      let errors = {};
 
-    // assert
-    expect(errors['email']).toBeTruthy();
-    expect(control.email.valid).toBeFalsy();
-  });
+      // act
+      control.email.setValue('test');
+      errors = control.email.errors || {};
 
-  it('minlength of password validty', () => {
-    // arrange
-    let errors = {};
+      // assert
+      expect(errors['email']).toBeTruthy();
+      expect(control.email.valid).toBeFalsy();
+    });
 
-    // act
-    control.password.setValue('test123');
-    errors = control.password.errors || {};
+    it('minlength of password validty', () => {
+      // arrange
+      let errors = {};
 
-    // assert
-    expect(errors['minlength']).toBeTruthy();
-    expect(control.password.valid).toBeFalsy();
-  });
+      // act
+      control.password.setValue('test123');
+      errors = control.password.errors || {};
 
-  it('mismatched passwords validity', () => {
-    // arrange
-    let errors = {};
+      // assert
+      expect(errors['minlength']).toBeTruthy();
+      expect(control.password.valid).toBeFalsy();
+    });
 
-    // act
-    control.password.setValue('test1234');
-    control.repassword.setValue('test123');
-    errors = form.errors || {};
+    it('mismatched passwords validity', () => {
+      // arrange
+      let errors = {};
 
-    // assert
-    expect(errors['mismatchedPasswords']).toBeTruthy();
+      // act
+      control.password.setValue('test1234');
+      control.repassword.setValue('test123');
+      errors = form.errors || {};
+
+      // assert
+      expect(errors['mismatchedPasswords']).toBeTruthy();
+    });
   });
 });
