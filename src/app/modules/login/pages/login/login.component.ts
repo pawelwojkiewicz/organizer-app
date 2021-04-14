@@ -31,9 +31,7 @@ export class LoginComponent implements OnInit {
       ),
       password: new FormControl(
         null,
-        [
-          Validators.required,
-        ],
+        Validators.required
       ),
     }
     );
@@ -64,14 +62,15 @@ export class LoginComponent implements OnInit {
           console.log(data);
         }, errorStatus => {
           switch (errorStatus) {
-            case 'UKNOWN_ERROR':
-              this.logForm.email.setErrors({ unknownError: true });
-              break;
             case 'EMAIL_NOT_FOUND':
               this.logForm.email.setErrors({ emailNotFound: true });
               break;
             case 'INVALID_PASSWORD':
               this.logForm.password.setErrors({ invalidPassword: true });
+              break;
+            default:
+              this.logForm.email.setErrors({ unknownError: true });
+              break;
           }
         });
     } else {
