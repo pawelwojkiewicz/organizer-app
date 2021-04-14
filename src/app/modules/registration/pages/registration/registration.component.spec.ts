@@ -108,5 +108,5 @@ describe('RegistrationComponent', () => {
       // assert
       expect(errors['mismatchedPasswords']).toBeTruthy();
     });
-  })
+  });
 });
