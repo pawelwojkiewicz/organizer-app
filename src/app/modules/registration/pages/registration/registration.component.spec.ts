@@ -13,34 +13,48 @@ describe('RegistrationComponent', () => {
     imports: [HttpClientTestingModule]
   });
 
+  describe('RegistrationComponentInputs', () => {
+
+    beforeAll(() => {
+      spectator = createComponent();
+    });
+
+    it('should create', () => {
+      expect(spectator).toBeTruthy();
+    });
+
+    it('it should has email input', () => {
+      // arrange
+      const emailInput = spectator.query('input[type="email"]');
+
+      // assert
+      expect(emailInput).toHaveAttribute('pInputText');
+      expect(emailInput).toHaveAttribute('placeholder', 'email');
+    });
+
+    it('it should has password input', () => {
+      // arrange
+      const passwordInputs = spectator.queryAll('input[type="password"]');
+
+      // assert
+      expect(passwordInputs[0]).toHaveAttribute('placeholder', 'password');
+      expect(passwordInputs[0]).toHaveAttribute('pPassword');
+    });
+
+    it('it should has confirm password input', () => {
+      // arrange
+      const passwordInputs = spectator.queryAll('input[type="password"]');
+
+      // assert
+      expect(passwordInputs[1]).toHaveAttribute('placeholder', 'repeat password');
+      expect(passwordInputs[1]).toHaveAttribute('pPassword');
+    });
+  });
+
   beforeEach(() => {
     spectator = createComponent();
     form = spectator.component.registrationForm;
     control = spectator.component.registrationForm.controls;
-  });
-
-  it('should create', () => {
-    // assert
-    expect(spectator).toBeTruthy();
-  });
-
-  it('it should has email input', () => {
-    // arrange
-    const emailInput = spectator.query('input[type="email"]');
-
-    // assert
-    expect(emailInput).toHaveAttribute('pInputText');
-    expect(emailInput).toHaveAttribute('placeholder', 'email');
-  });
-
-  it('it should has password and confirm password inputs', () => {
-    // arrange
-    const passwordInputs = spectator.queryAll('input[type="password"]');
-
-    // assert
-    expect(passwordInputs[0]).toHaveAttribute('placeholder', 'password');
-    expect(passwordInputs[1]).toHaveAttribute('placeholder', 'repeat password');
-    expect(passwordInputs).toHaveAttribute('pPassword');
   });
 
   it('form invalid when inputs are empty', () => {
