@@ -5,7 +5,7 @@ import { debounceTime } from 'rxjs/operators';
 import { AuthService } from 'src/app/core/services/auth.service';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 
-UntilDestroy();
+@UntilDestroy()
 @Component({
   selector: 'app-registration',
   templateUrl: './registration.component.html',
