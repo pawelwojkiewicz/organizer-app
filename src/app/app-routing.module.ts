@@ -12,7 +12,14 @@ const routes: Routes = [
     path: 'registration',
     loadChildren: () =>
       import('./modules/registration/registration.module').then(m => m.RegistrationModule)
-  }];
+  },
+  {
+    path: 'calendar',
+    loadChildren: () =>
+      import('./modules/calendar/calendar.module').then(m => m.CalendarModule)
+  }
+
+];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes, { relativeLinkResolution: 'legacy' })],
