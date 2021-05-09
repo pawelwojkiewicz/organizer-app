@@ -1,0 +1,20 @@
+@mixin flex-center() {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@mixin position-center() {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+@mixin square($size) {
+  width: $size;
+  height: $size;
+}
+
+@mixin bg-opacity($color, $opacity) {
+  background-color: rgba($color, $opacity);
+}

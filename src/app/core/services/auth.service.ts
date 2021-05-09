@@ -39,17 +39,7 @@ export class AuthService {
         email,
         password,
         returnSecureToken: true
-      }).pipe(
-        catchError(this.handleError),
-        tap(resData => {
-          this.handleAuthentication(
-            resData.email,
-            resData.localId,
-            resData.idToken,
-            +resData.expiresIn
-          );
-        })
-      );
+      });
   }
 
   login(email: string, password: string): Observable<LoginUser> {
@@ -61,7 +51,6 @@ export class AuthService {
         returnSecureToken: true
       }
     ).pipe(
-      catchError(this.handleError),
       tap(resData => {
         this.handleAuthentication(
           resData.email,
@@ -131,21 +120,6 @@ export class AuthService {
     this.user.next(newUser);
     this.autoLogout(expiresIn * 1000);
     localStorage.setItem('user', JSON.stringify(newUser));
-  }
-
-  private handleError(errorRes: HttpErrorResponse): Observable<never> {
-    const errorMessage = errorRes.error.error.message;
-    if (!errorRes.error || !errorRes.error.error) {
-      return throwError({ unknownError: true });
-    }
-    switch (errorMessage) {
-      case 'EMAIL_EXISTS':
-        return throwError({ emailExist: true });
-      case 'EMAIL_NOT_FOUND':
-        return throwError(errorMessage);
-      case 'INVALID_PASSWORD':
-        return throwError(errorMessage);
-    }
   }
 }
 

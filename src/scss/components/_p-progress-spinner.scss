@@ -1,0 +1,8 @@
+p-progressspinner {
+  position: fixed;
+  top: 0;
+  @include flex-center();
+  @include square(100%);
+  @include bg-opacity($color--black, 0.70);
+  z-index: $zindex-fixed;
+}
