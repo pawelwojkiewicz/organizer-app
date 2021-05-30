@@ -57,4 +57,9 @@
     <span>Do you have already account ? <a routerLink="/login">Log In</a>
     </span>
   </div>
+  <p-dialog header="Title"
+            modal="true"
+            [(visible)]="showDialog"> Congratulations! You have been successfully registered !
+    <p-button routerLink="/login"> Log in</p-button>
+  </p-dialog>
 </section>

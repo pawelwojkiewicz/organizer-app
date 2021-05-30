@@ -16,9 +16,11 @@ export class RegistrationComponent implements OnInit {
 
   registrationForm: FormGroup;
   errorMessage: string;
+  showDialog = false;
   constructor(
     private changeDetector: ChangeDetectorRef,
-    private authService: AuthService) { }
+    private authService: AuthService
+  ) { }
 
   ngOnInit(): void {
     this.initRegisterForm();
@@ -76,14 +78,14 @@ export class RegistrationComponent implements OnInit {
       const password = this.registrationForm.value.password;
       this.authService.register(email, password)
         .pipe(untilDestroyed(this))
-        .subscribe(data => {
-          console.log(data);
+        .subscribe(() => {
+          this.showDialog = true;
+          this.changeDetector.detectChanges();
         }, errorStatus => {
           this.regForm.email.setErrors(errorStatus);
         });
     } else {
       this.validateAllFormFields(this.registrationForm);
-      console.log(this.registrationForm);
     }
   }
 }

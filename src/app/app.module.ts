@@ -8,6 +8,7 @@ import { CoreModule } from './core/core.module';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { LoaderInterceptor } from './core/interceptors/loader.interceptor';
+import { ToastModule } from 'primeng/toast';
 
 
 @NgModule({
@@ -19,7 +20,8 @@ import { LoaderInterceptor } from './core/interceptors/loader.interceptor';
     BrowserAnimationsModule,
     AppRoutingModule,
     CoreModule,
-    ProgressSpinnerModule
+    ProgressSpinnerModule,
+    ToastModule
   ],
   providers: [
     {

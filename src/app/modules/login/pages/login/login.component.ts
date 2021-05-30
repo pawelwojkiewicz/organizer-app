@@ -4,6 +4,8 @@ import { AuthService } from 'src/app/core/services/auth.service';
 import { untilDestroyed, UntilDestroy } from '@ngneat/until-destroy';
 import { Router } from '@angular/router';
 import { routePath } from 'src/app/core/constans/route.path';
+import { MessageService } from 'primeng/api';
+import { TouchedFormControlsService } from 'src/app/core/services/touched-form-controls.service';
 
 
 @UntilDestroy()
@@ -11,7 +13,7 @@ import { routePath } from 'src/app/core/constans/route.path';
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LoginComponent implements OnInit {
 
@@ -21,6 +23,8 @@ export class LoginComponent implements OnInit {
   constructor(
     private authService: AuthService,
     private router: Router,
+    private messageService: MessageService,
+    private formControl: TouchedFormControlsService
   ) { }
 
   ngOnInit(): void {
@@ -50,16 +54,7 @@ export class LoginComponent implements OnInit {
     return this.loginForm.controls;
   }
 
-  validateAllFormFields(formGroup: FormGroup): void {
-    Object.keys(formGroup.controls).forEach(field => {
-      const control = formGroup.get(field);
-      if (control instanceof FormControl) {
-        control.markAsTouched({ onlySelf: true });
-        control.markAsDirty({ onlySelf: true });
-        control.updateValueAndValidity();
-      }
-    });
-  }
+
 
   onLogin(): void {
     if (this.loginForm.valid) {
@@ -67,8 +62,15 @@ export class LoginComponent implements OnInit {
       const password = this.loginForm.value.password;
       this.authService.login(email, password)
         .pipe(untilDestroyed(this))
-        .subscribe(data => {
+        .subscribe(() => {
           this.router.navigate((this.calendarRoute));
+          this.messageService.add(
+            {
+              severity: 'success',
+              summary: 'Success',
+              detail: 'You have successfully logged in!'
+            }
+          );
         }
           , errorStatus => {
             switch (errorStatus) {
@@ -84,7 +86,7 @@ export class LoginComponent implements OnInit {
             }
           });
     } else {
-      this.validateAllFormFields(this.loginForm);
+      this.formControl.validateAllFormFields(this.loginForm);
     }
   }
 }
