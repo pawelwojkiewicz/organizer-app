@@ -47,3 +47,9 @@
             control.errors.invalidPassword
             ">
 </ng-content>
+<ng-content select="[tooManyAttempts]"
+            *ngIf="
+            control.invalid &&
+            control.errors.tooManyAttempts
+            ">
+</ng-content>

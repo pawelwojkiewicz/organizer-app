@@ -4,6 +4,7 @@ import { PasswordValidators } from 'ngx-validators';
 import { debounceTime } from 'rxjs/operators';
 import { AuthService } from 'src/app/core/services/auth.service';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
+import { TouchedFormControlsService } from 'src/app/core/services/touched-form-controls.service';
 
 @UntilDestroy()
 @Component({
@@ -19,7 +20,8 @@ export class RegistrationComponent implements OnInit {
   showDialog = false;
   constructor(
     private changeDetector: ChangeDetectorRef,
-    private authService: AuthService
+    private authService: AuthService,
+    private touchedFormControl: TouchedFormControlsService
   ) { }
 
   ngOnInit(): void {
@@ -61,17 +63,6 @@ export class RegistrationComponent implements OnInit {
     return this.registrationForm.controls;
   }
 
-  validateAllFormFields(formGroup: FormGroup): void {
-    Object.keys(formGroup.controls).forEach(field => {
-      const control = formGroup.get(field);
-      if (control instanceof FormControl) {
-        control.markAsTouched({ onlySelf: true });
-        control.markAsDirty({ onlySelf: true });
-        control.updateValueAndValidity();
-      }
-    });
-  }
-
   onRegister(): void {
     if (this.registrationForm.valid) {
       const email = this.registrationForm.value.email;
@@ -85,7 +76,7 @@ export class RegistrationComponent implements OnInit {
           this.regForm.email.setErrors(errorStatus);
         });
     } else {
-      this.validateAllFormFields(this.registrationForm);
+      this.touchedFormControl.validateAllFormFields(this.registrationForm);
     }
   }
 }

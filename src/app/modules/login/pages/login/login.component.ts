@@ -24,7 +24,7 @@ export class LoginComponent implements OnInit {
     private authService: AuthService,
     private router: Router,
     private messageService: MessageService,
-    private formControl: TouchedFormControlsService
+    private touchedFormControl: TouchedFormControlsService
   ) { }
 
   ngOnInit(): void {
@@ -80,13 +80,17 @@ export class LoginComponent implements OnInit {
               case 'INVALID_PASSWORD':
                 this.logForm.password.setErrors({ invalidPassword: true });
                 break;
+              case 'TOO_MANY_ATTEMPTS_TRY_LATER : Access to this account has been temporarily disabled due to many failed login attempts. You can immediately restore it by resetting your password or you can try again later.':
+                this.logForm.email.setErrors({ tooManyAttempts: true });
+                break;
               default:
                 this.logForm.email.setErrors({ unknownError: true });
                 break;
             }
-          });
+          }
+        );
     } else {
-      this.formControl.validateAllFormFields(this.loginForm);
+      this.touchedFormControl.validateAllFormFields(this.loginForm);
     }
   }
 }
