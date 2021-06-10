@@ -72,8 +72,11 @@ export class RegistrationComponent implements OnInit {
         .subscribe(() => {
           this.showDialog = true;
           this.changeDetector.detectChanges();
-        }, errorStatus => {
-          this.regForm.email.setErrors(errorStatus);
+        }, errorResponse => {
+          const errorMessage = errorResponse.error.error.message;
+          if (errorMessage === 'EMAIL_EXISTS') {
+            this.regForm.email.setErrors({ emailExist: true });
+          }
         });
     } else {
       this.touchedFormControl.validateAllFormFields(this.registrationForm);

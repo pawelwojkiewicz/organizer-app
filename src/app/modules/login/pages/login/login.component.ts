@@ -54,8 +54,6 @@ export class LoginComponent implements OnInit {
     return this.loginForm.controls;
   }
 
-
-
   onLogin(): void {
     if (this.loginForm.valid) {
       const email = this.loginForm.value.email;
@@ -72,8 +70,10 @@ export class LoginComponent implements OnInit {
             }
           );
         }
-          , errorStatus => {
-            switch (errorStatus) {
+          // Przechwytuje errory przed global error handlerem
+          , errorResponse => {
+            const errorMessage = errorResponse.error.error.message;
+            switch (errorMessage) {
               case 'EMAIL_NOT_FOUND':
                 this.logForm.email.setErrors({ emailNotFound: true });
                 break;

@@ -18,7 +18,6 @@ export class AuthService {
   user$ = this.user.asObservable();
   private expirationTimeout: any;
 
-
   constructor(
     private http: HttpClient,
     private router: Router,
@@ -39,9 +38,7 @@ export class AuthService {
         email,
         password,
         returnSecureToken: true
-      }).pipe(
-        catchError(this.handleError)
-      );
+      });
   }
 
   login(email: string, password: string): Observable<LoginUser> {
@@ -60,12 +57,9 @@ export class AuthService {
           resData.idToken,
           +resData.expiresIn
         );
-      }),
-      catchError(this.handleError)
+      })
     );
   }
-
-
 
   autoLogin(): void {
 
@@ -82,7 +76,6 @@ export class AuthService {
 
     if (user.token) {
       this.user.next(user);
-
       const expirationDuration = (
         new Date(storagedUser._tokenExpirationDate).getTime() -
         new Date().getTime()
@@ -107,23 +100,6 @@ export class AuthService {
         this.logout();
       }, expirationDuration
     );
-  }
-
-  handleError(errorRes: HttpErrorResponse): Observable<never> {
-    const errorMessage = errorRes.error.error.message;
-    if (!errorRes.error || !errorRes.error.error) {
-      return throwError({ unknownError: true });
-    }
-    switch (errorMessage) {
-      case 'EMAIL_EXISTS':
-        return throwError({ emailExist: true });
-      case 'EMAIL_NOT_FOUND':
-        return throwError(errorMessage);
-      case 'INVALID_PASSWORD':
-        return throwError(errorMessage);
-      case 'TOO_MANY_ATTEMPTS_TRY_LATER : Access to this account has been temporarily disabled due to many failed login attempts. You can immediately restore it by resetting your password or you can try again later.':
-        return throwError(errorMessage);
-    }
   }
 
   private handleAuthentication(
