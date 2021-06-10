@@ -35,3 +35,21 @@
             control.errors.mismatchedPasswords
             ">
 </ng-content>
+<ng-content select="[emailNotFound]"
+            *ngIf="
+            control.invalid &&
+            control.errors.emailNotFound
+            ">
+</ng-content>
+<ng-content select="[invalidPassword]"
+            *ngIf="
+            control.invalid &&
+            control.errors.invalidPassword
+            ">
+</ng-content>
+<ng-content select="[tooManyAttempts]"
+            *ngIf="
+            control.invalid &&
+            control.errors.tooManyAttempts
+            ">
+</ng-content>

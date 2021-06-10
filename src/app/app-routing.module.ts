@@ -3,6 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
+  // { path: '**', redirectTo: '/login' },
   {
     path: 'login',
     loadChildren: () =>
@@ -12,7 +13,14 @@ const routes: Routes = [
     path: 'registration',
     loadChildren: () =>
       import('./modules/registration/registration.module').then(m => m.RegistrationModule)
-  }];
+  },
+  {
+    path: 'calendar',
+    loadChildren: () =>
+      import('./modules/calendar/calendar.module').then(m => m.CalendarModule)
+  }
+
+];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes, { relativeLinkResolution: 'legacy' })],

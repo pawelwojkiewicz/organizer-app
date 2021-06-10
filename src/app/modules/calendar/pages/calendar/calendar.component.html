@@ -1,0 +1,10 @@
+<div *ngIf="user$ | async as user">
+  <p>{{user.email}}</p>
+  <input [(ngModel)]="binding">
+  <button (click)="addTask(user)">add</button>
+  <div *ngIf="tasks$ | async as tasks">
+    <h3>tasks:</h3>
+    <p>{{tasks.task}}</p>
+  </div>
+  <button (click)="logout()">logout</button>
+</div>

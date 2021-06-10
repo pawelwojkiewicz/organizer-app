@@ -8,6 +8,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { InputTextModule } from 'primeng/inputtext';
 import { PasswordModule } from 'primeng/password';
 import { ButtonModule } from 'primeng/button';
+import { SharedModule } from 'src/app/shared/shared.module';
 
 
 @NgModule({
@@ -18,7 +19,8 @@ import { ButtonModule } from 'primeng/button';
     ReactiveFormsModule,
     InputTextModule,
     PasswordModule,
-    ButtonModule
+    ButtonModule,
+    SharedModule
   ]
 })
 export class LoginModule { }

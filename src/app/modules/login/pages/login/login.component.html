@@ -1,26 +1,50 @@
 <section class="section auth__section">
   <div class="container">
     <form class="form"
-          [formGroup]="">
+          [formGroup]="loginForm"
+          (ngSubmit)="onLogin()">
       <div class="p-inputgroup">
         <span class="p-input-icon-left">
           <i class="pi pi-user"></i>
-          <input type="text"
+          <input type="email"
                  pInputText
-                 placeholder="username">
+                 placeholder="email"
+                 formControlName="email" />
         </span>
       </div>
+      <app-validation [control]="logForm.email">
+        <span class="invalid-message"
+              required>Email is required.</span>
+        <span class="invalid-message"
+              email>Please put correct e-mail. </span>
+        <span class="invalid-message"
+              emailNotFound>Sorry, this email does not exist in our database.</span>
+        <span class="invalid-message"
+              tooManyAttempts>Access to this account has been temporarily disabled due to many
+          failed login attempts.</span>
+      </app-validation>
       <div class="p-inputgroup">
         <span class="p-input-icon-left">
           <i class="pi pi-lock"></i>
           <input type="password"
                  pPassword
-                 placeholder="password" />
+                 [feedback]="false"
+                 placeholder="password"
+                 formControlName="password" />
         </span>
       </div>
-      <p-button label="Log In"></p-button>
+      <app-validation [control]="logForm.password">
+        <span class="invalid-message"
+              required>Password is required.</span>
+        <span class="invalid-message"
+              invalidPassword>Sorry, your password is incorrect.</span>
+      </app-validation>
+      <p-button type="submit"
+                class="registration__button"
+                label="Login"></p-button>
     </form>
-    <span>Don't you have account yet? ? <a routerLink="/registration">Register </a>
+    <span>Don't you have account yet? ? <a class="link"
+         routerLink="/registration">Register </a>
     </span>
   </div>
 </section>

@@ -4,6 +4,7 @@ import { PasswordValidators } from 'ngx-validators';
 import { debounceTime } from 'rxjs/operators';
 import { AuthService } from 'src/app/core/services/auth.service';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
+import { TouchedFormControlsService } from 'src/app/core/services/touched-form-controls.service';
 
 @UntilDestroy()
 @Component({
@@ -16,9 +17,12 @@ export class RegistrationComponent implements OnInit {
 
   registrationForm: FormGroup;
   errorMessage: string;
+  showDialog = false;
   constructor(
     private changeDetector: ChangeDetectorRef,
-    private authService: AuthService) { }
+    private authService: AuthService,
+    private touchedFormControl: TouchedFormControlsService
+  ) { }
 
   ngOnInit(): void {
     this.initRegisterForm();
@@ -59,31 +63,23 @@ export class RegistrationComponent implements OnInit {
     return this.registrationForm.controls;
   }
 
-  validateAllFormFields(formGroup: FormGroup): void {
-    Object.keys(formGroup.controls).forEach(field => {
-      const control = formGroup.get(field);
-      if (control instanceof FormControl) {
-        control.markAsTouched({ onlySelf: true });
-        control.markAsDirty({ onlySelf: true });
-        control.updateValueAndValidity();
-      }
-    });
-  }
-
   onRegister(): void {
     if (this.registrationForm.valid) {
       const email = this.registrationForm.value.email;
       const password = this.registrationForm.value.password;
       this.authService.register(email, password)
         .pipe(untilDestroyed(this))
-        .subscribe(data => {
-          console.log(data);
-        }, errorStatus => {
-          this.regForm.email.setErrors(errorStatus);
+        .subscribe(() => {
+          this.showDialog = true;
+          this.changeDetector.detectChanges();
+        }, errorResponse => {
+          const errorMessage = errorResponse.error.error.message;
+          if (errorMessage === 'EMAIL_EXISTS') {
+            this.regForm.email.setErrors({ emailExist: true });
+          }
         });
     } else {
-      this.validateAllFormFields(this.registrationForm);
-      console.log(this.registrationForm);
+      this.touchedFormControl.validateAllFormFields(this.registrationForm);
     }
   }
 }
