@@ -6,6 +6,7 @@ import { Observable, EMPTY } from 'rxjs';
 import { untilDestroyed, UntilDestroy } from '@ngneat/until-destroy';
 import { MessageService } from 'primeng/api';
 import { switchMap } from 'rxjs/operators';
+import * as moment from 'moment';
 
 @UntilDestroy()
 @Component({
@@ -19,6 +20,11 @@ export class CalendarComponent implements OnInit {
   user$: Observable<User> = this.authService.user$;
   tasks$: Observable<any>;
   binding: string;
+  moment = moment();
+  markCurrentDay = true;
+  currentDate = this.moment.format('MMMM YYYY');
+  daysInMonth: number[];
+  currentNumberOfMonth = +this.moment.format('D');
 
   constructor(
     private authService: AuthService,
@@ -28,7 +34,6 @@ export class CalendarComponent implements OnInit {
 
   ngOnInit(): void {
     this.authService.autoLogin();
-
     this.tasks$ = this.user$.pipe(
       switchMap(
         (user: User) => {
@@ -40,6 +45,25 @@ export class CalendarComponent implements OnInit {
       ),
       untilDestroyed(this)
     );
+    this.setDaysInMonth(moment().daysInMonth());
+  }
+
+  setDaysInMonth(days: number): void {
+    this.daysInMonth = [];
+    for (let i = 0; i < days; i++) {
+      this.daysInMonth.push(i + 1);
+    }
+  }
+
+  getNewMonth(newMoment: moment.Moment): void {
+    const daysInNewMonth = newMoment.daysInMonth();
+    const newDate = newMoment.format('MMMM YYYY');
+    this.setDaysInMonth(daysInNewMonth);
+    if (newDate !== this.currentDate) {
+      this.markCurrentDay = false;
+      return;
+    }
+    this.markCurrentDay = true;
   }
 
   addTask(user: User): void {
