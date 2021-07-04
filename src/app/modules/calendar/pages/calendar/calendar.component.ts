@@ -6,7 +6,6 @@ import { Observable, EMPTY } from 'rxjs';
 import { untilDestroyed, UntilDestroy } from '@ngneat/until-destroy';
 import { MessageService } from 'primeng/api';
 import { switchMap, tap } from 'rxjs/operators';
-import * as moment from 'moment';
 import { MomentService } from 'src/app/core/services/moment.service';
 
 @UntilDestroy()
@@ -23,7 +22,7 @@ export class CalendarComponent implements OnInit {
   binding: string;
   mark = true;
   daysInMonth: number[];
-  currentDay: number;
+  currentDay = this.momentService.moment.format('D');
   currentDate = this.momentService.moment.format('MMMM YYYY');
   newDate: string;
 
@@ -68,9 +67,8 @@ export class CalendarComponent implements OnInit {
     this.momentService.currentDate$
       .pipe(untilDestroyed(this))
       .subscribe(
-        (el: moment.Moment) => {
-          this.currentDay = +el.format('D');
-          this.newDate = el.format('MMMM YYYY');
+        (moment: moment.Moment) => {
+          this.newDate = moment.format('MMMM YYYY');
           if (this.newDate === this.currentDate) {
             this.mark = true;
             return;
