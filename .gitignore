@@ -44,10 +44,3 @@ testem.log
 # System Files
 .DS_Store
 Thumbs.db
-
-/src
-/public
-/e2e
-/.vscode
-/.github
-
