@@ -5,8 +5,9 @@ import { DataStorageService } from 'src/app/core/services/data-storage.service';
 import { Observable, EMPTY } from 'rxjs';
 import { untilDestroyed, UntilDestroy } from '@ngneat/until-destroy';
 import { MessageService } from 'primeng/api';
-import { switchMap } from 'rxjs/operators';
+import { switchMap, tap } from 'rxjs/operators';
 import * as moment from 'moment';
+import { MomentService } from 'src/app/core/services/moment.service';
 
 @UntilDestroy()
 @Component({
@@ -20,17 +21,17 @@ export class CalendarComponent implements OnInit {
   user$: Observable<User> = this.authService.user$;
   tasks$: Observable<any>;
   binding: string;
-  moment = moment();
-  markCurrentDay = true;
-  currentDate = this.moment.format('MMMM YYYY');
-  newDate: string;
+  mark = true;
   daysInMonth: number[];
-  currentNumberOfMonth = +this.moment.format('D');
+  currentDay: number;
+  currentDate = this.momentService.moment.format('MMMM YYYY');
+  newDate: string;
 
   constructor(
     private authService: AuthService,
     private dataStorageService: DataStorageService,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private momentService: MomentService,
   ) { }
 
   ngOnInit(): void {
@@ -46,38 +47,47 @@ export class CalendarComponent implements OnInit {
       ),
       untilDestroyed(this)
     );
-    this.setDaysInMonth(moment().daysInMonth());
+    this.setDaysInMonth();
+    this.markCurrentDay();
   }
 
-  setDaysInMonth(days: number): void {
-    this.daysInMonth = [];
-    for (let i = 0; i < days; i++) {
-      this.daysInMonth.push(i + 1);
-    }
+  setDaysInMonth(): void {
+    this.momentService.getCurrentDaysInMonth()
+      .pipe(untilDestroyed(this))
+      .subscribe(
+        (days: number) => {
+          this.daysInMonth = [];
+          for (let i = 0; i < days; i++) {
+            this.daysInMonth.push(i + 1);
+          }
+        }
+      );
   }
 
-  getCurrentDate(currentDate: moment.Moment): void {
-    const daysInCurrentMonth = currentDate.daysInMonth();
-    this.newDate = currentDate.format('MMMM YYYY');
-    this.setDaysInMonth(daysInCurrentMonth);
-    if (this.newDate !== this.currentDate) {
-      this.markCurrentDay = false;
-      return;
-    }
-    this.markCurrentDay = true;
+  markCurrentDay(): void {
+    this.momentService.currentDate$
+      .pipe(untilDestroyed(this))
+      .subscribe(
+        (el: moment.Moment) => {
+          this.currentDay = +el.format('D');
+          this.newDate = el.format('MMMM YYYY');
+          if (this.newDate === this.currentDate) {
+            this.mark = true;
+            return;
+          }
+          this.mark = false;
+        });
+
   }
 
   onOpenCalendarTile(day: number): void {
-    console.log(day, this.newDate);
-  }
-
-
-
-  addTask(user: User): void {
-    this.dataStorageService
-      .addTask(user, this.binding)
-      .pipe(untilDestroyed(this))
-      .subscribe();
+    // this.momentService.getCurrentDate()
+    //   .pipe(untilDestroyed(this))
+    //   .subscribe(
+    //     (currentDate: string) => {
+    //       console.log(day, currentDate);
+    //     }
+    //   )
   }
 
   logout(): void {

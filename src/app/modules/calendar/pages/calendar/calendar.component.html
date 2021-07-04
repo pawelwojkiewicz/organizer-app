@@ -1,10 +1,10 @@
 <div class="container">
-  <app-header (setCurrentDate)="getCurrentDate($event)"></app-header>
+  <app-header></app-header>
   <div class="calendar d-flex flex-wrap mt-5">
     <app-calendar-tile (click)="onOpenCalendarTile(day)"
-                       [ngClass]="{'calendar-tile__current' : currentNumberOfMonth === (i+1) && markCurrentDay}"
+                       [ngClass]="{'calendar-tile__current' : currentDay === (index+1) && mark}"
                        [day]="day"
-                       *ngFor="let day of daysInMonth; let i=index;">
+                       *ngFor="let day of daysInMonth; let index=index;">
     </app-calendar-tile>
   </div>
 </div>

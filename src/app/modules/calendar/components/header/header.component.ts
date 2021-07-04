@@ -1,6 +1,8 @@
-import { Component, OnInit, ChangeDetectionStrategy, Output, EventEmitter } from '@angular/core';
-import * as moment from 'moment';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { MomentService } from 'src/app/core/services/moment.service';
+import { untilDestroyed, UntilDestroy } from '@ngneat/until-destroy';
 
+@UntilDestroy()
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
@@ -8,30 +10,33 @@ import * as moment from 'moment';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HeaderComponent implements OnInit {
-
-  @Output() setCurrentDate = new EventEmitter<moment.Moment>();
-
-  moment = moment();
-  currentDate = this.moment.format('MMMM YYYY');
+  currentDate: string;
 
   ngOnInit(): void {
-    this.emitDate();
+    this.getCurrentDate();
   }
 
-  constructor() { }
+  constructor(
+    private momentService: MomentService
+  ) { }
 
   onPreviousMonth(): void {
-    this.currentDate = this.moment.subtract(1, 'M').format('MMMM YYYY');
-    this.emitDate();
+    this.momentService.onPrevMonth();
+    this.getCurrentDate();
   }
 
   onNextMonth(): void {
-    this.currentDate = this.moment.add(1, 'M').format('MMMM YYYY');
-    this.emitDate();
+    this.momentService.onNextMonth();
+    this.getCurrentDate();
   }
 
-  emitDate(): void {
-    const currentDate = moment(this.currentDate);
-    this.setCurrentDate.emit(currentDate);
+  getCurrentDate(): void {
+    this.momentService.getCurrentDate()
+      .pipe(untilDestroyed(this))
+      .subscribe(
+        (date: string) => {
+          this.currentDate = date;
+        }
+      );
   }
 }
