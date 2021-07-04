@@ -7,27 +7,31 @@ import * as moment from 'moment';
   styleUrls: ['./header.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class HeaderComponent {
+export class HeaderComponent implements OnInit {
 
-  @Output() switchMonth = new EventEmitter<moment.Moment>();
+  @Output() setCurrentDate = new EventEmitter<moment.Moment>();
 
   moment = moment();
   currentDate = this.moment.format('MMMM YYYY');
+
+  ngOnInit(): void {
+    this.emitDate();
+  }
 
   constructor() { }
 
   onPreviousMonth(): void {
     this.currentDate = this.moment.subtract(1, 'M').format('MMMM YYYY');
-    this.emitNewMonth();
+    this.emitDate();
   }
 
   onNextMonth(): void {
     this.currentDate = this.moment.add(1, 'M').format('MMMM YYYY');
-    this.emitNewMonth();
+    this.emitDate();
   }
 
-  emitNewMonth(): void {
-    const newMonth = moment(this.currentDate);
-    this.switchMonth.emit(newMonth);
+  emitDate(): void {
+    const currentDate = moment(this.currentDate);
+    this.setCurrentDate.emit(currentDate);
   }
 }

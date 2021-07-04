@@ -23,6 +23,7 @@ export class CalendarComponent implements OnInit {
   moment = moment();
   markCurrentDay = true;
   currentDate = this.moment.format('MMMM YYYY');
+  newDate: string;
   daysInMonth: number[];
   currentNumberOfMonth = +this.moment.format('D');
 
@@ -55,16 +56,22 @@ export class CalendarComponent implements OnInit {
     }
   }
 
-  getNewMonth(newMoment: moment.Moment): void {
-    const daysInNewMonth = newMoment.daysInMonth();
-    const newDate = newMoment.format('MMMM YYYY');
-    this.setDaysInMonth(daysInNewMonth);
-    if (newDate !== this.currentDate) {
+  getCurrentDate(currentDate: moment.Moment): void {
+    const daysInCurrentMonth = currentDate.daysInMonth();
+    this.newDate = currentDate.format('MMMM YYYY');
+    this.setDaysInMonth(daysInCurrentMonth);
+    if (this.newDate !== this.currentDate) {
       this.markCurrentDay = false;
       return;
     }
     this.markCurrentDay = true;
   }
+
+  onOpenCalendarTile(day: number): void {
+    console.log(day, this.newDate);
+  }
+
+
 
   addTask(user: User): void {
     this.dataStorageService
