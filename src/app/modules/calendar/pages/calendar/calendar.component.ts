@@ -5,8 +5,8 @@ import { DataStorageService } from 'src/app/core/services/data-storage.service';
 import { Observable, EMPTY } from 'rxjs';
 import { untilDestroyed, UntilDestroy } from '@ngneat/until-destroy';
 import { MessageService } from 'primeng/api';
-import { switchMap, tap } from 'rxjs/operators';
-import { MomentService } from 'src/app/core/services/moment.service';
+import { switchMap } from 'rxjs/operators';
+import { CalendarService } from 'src/app/modules/calendar/calendar.service';
 
 @UntilDestroy()
 @Component({
@@ -22,15 +22,15 @@ export class CalendarComponent implements OnInit {
   binding: string;
   mark = true;
   daysInMonth: number[];
-  currentDay = this.momentService.moment.format('D');
-  currentDate = this.momentService.moment.format('MMMM YYYY');
+  currentDay = +this.calendarService.moment.format('D');
+  currentDate = this.calendarService.moment.format('MMMM YYYY');
   newDate: string;
 
   constructor(
     private authService: AuthService,
     private dataStorageService: DataStorageService,
     private messageService: MessageService,
-    private momentService: MomentService,
+    private calendarService: CalendarService,
   ) { }
 
   ngOnInit(): void {
@@ -51,7 +51,7 @@ export class CalendarComponent implements OnInit {
   }
 
   setDaysInMonth(): void {
-    this.momentService.getCurrentDaysInMonth()
+    this.calendarService.getCurrentDaysInMonth()
       .pipe(untilDestroyed(this))
       .subscribe(
         (days: number) => {
@@ -64,7 +64,7 @@ export class CalendarComponent implements OnInit {
   }
 
   markCurrentDay(): void {
-    this.momentService.currentDate$
+    this.calendarService.currentDate$
       .pipe(untilDestroyed(this))
       .subscribe(
         (moment: moment.Moment) => {
@@ -79,7 +79,7 @@ export class CalendarComponent implements OnInit {
   }
 
   onOpenCalendarTile(day: number): void {
-    // this.momentService.getCurrentDate()
+    // this.calendarService.getCurrentDate()
     //   .pipe(untilDestroyed(this))
     //   .subscribe(
     //     (currentDate: string) => {

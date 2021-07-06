@@ -6,7 +6,7 @@ import { map } from 'rxjs/operators';
 @Injectable({
   providedIn: 'root'
 })
-export class MomentService {
+export class CalendarService {
 
   moment = moment();
   private currentDate = new BehaviorSubject<moment.Moment>(this.moment);

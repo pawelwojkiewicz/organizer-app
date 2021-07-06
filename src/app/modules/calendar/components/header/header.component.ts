@@ -1,5 +1,5 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
-import { MomentService } from 'src/app/core/services/moment.service';
+import { CalendarService } from 'src/app/modules/calendar/calendar.service';
 import { untilDestroyed, UntilDestroy } from '@ngneat/until-destroy';
 
 @UntilDestroy()
@@ -17,21 +17,21 @@ export class HeaderComponent implements OnInit {
   }
 
   constructor(
-    private momentService: MomentService
+    private calendarService: CalendarService
   ) { }
 
   onPreviousMonth(): void {
-    this.momentService.onPrevMonth();
+    this.calendarService.onPrevMonth();
     this.getCurrentDate();
   }
 
   onNextMonth(): void {
-    this.momentService.onNextMonth();
+    this.calendarService.onNextMonth();
     this.getCurrentDate();
   }
 
   getCurrentDate(): void {
-    this.momentService.getCurrentDate()
+    this.calendarService.getCurrentDate()
       .pipe(untilDestroyed(this))
       .subscribe(
         (date: string) => {
