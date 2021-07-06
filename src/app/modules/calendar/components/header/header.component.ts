@@ -9,12 +9,8 @@ import { untilDestroyed, UntilDestroy } from '@ngneat/until-destroy';
   styleUrls: ['./header.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class HeaderComponent implements OnInit {
-  currentDate: string;
-
-  ngOnInit(): void {
-    this.getCurrentDate();
-  }
+export class HeaderComponent {
+  currentDate$ = this.calendarService.getCurrentDate();
 
   constructor(
     private calendarService: CalendarService
@@ -22,21 +18,9 @@ export class HeaderComponent implements OnInit {
 
   onPreviousMonth(): void {
     this.calendarService.onPrevMonth();
-    this.getCurrentDate();
   }
 
   onNextMonth(): void {
     this.calendarService.onNextMonth();
-    this.getCurrentDate();
-  }
-
-  getCurrentDate(): void {
-    this.calendarService.getCurrentDate()
-      .pipe(untilDestroyed(this))
-      .subscribe(
-        (date: string) => {
-          this.currentDate = date;
-        }
-      );
   }
 }

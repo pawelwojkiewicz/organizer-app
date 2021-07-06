@@ -1,10 +1,9 @@
 <div class="container">
   <app-header></app-header>
   <div class="calendar d-flex flex-wrap mt-5">
-    <app-calendar-tile (click)="onOpenCalendarTile(day)"
-                       [ngClass]="{'calendar-tile__current' : currentDay === (index+1) && mark}"
-                       [day]="day"
-                       *ngFor="let day of daysInMonth; let index=index;">
-    </app-calendar-tile>
+    <app-calendar-tile [moment]="moment.set('date',i+1)"
+                       (click)="openCurrentDay(moment.date(i+1))"
+                       [ngClass]="{'calendar-tile__current': moment.format() === currentMoment.format()}"
+                       *ngFor="let moment of momentsInCurrentMonth; let i=index;"> </app-calendar-tile>
   </div>
 </div>

@@ -1,5 +1,5 @@
 import { Component, OnInit, ChangeDetectionStrategy, Input } from '@angular/core';
-
+import * as moment from 'moment';
 @Component({
   selector: 'app-calendar-tile',
   templateUrl: './calendar-tile.component.html',
@@ -7,10 +7,15 @@ import { Component, OnInit, ChangeDetectionStrategy, Input } from '@angular/core
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CalendarTileComponent implements OnInit {
-  @Input() day: number;
-  constructor() { }
+  @Input() moment: moment.Moment;
+  currentMoment = moment();
+  constructor(
+  ) { }
 
   ngOnInit(): void {
   }
 
+  openCurrentDay(moment) {
+    console.log(moment)
+  }
 }

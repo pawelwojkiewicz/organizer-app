@@ -7,6 +7,7 @@ import { untilDestroyed, UntilDestroy } from '@ngneat/until-destroy';
 import { MessageService } from 'primeng/api';
 import { switchMap } from 'rxjs/operators';
 import { CalendarService } from 'src/app/modules/calendar/calendar.service';
+import * as moment from 'moment';
 
 @UntilDestroy()
 @Component({
@@ -20,11 +21,8 @@ export class CalendarComponent implements OnInit {
   user$: Observable<User> = this.authService.user$;
   tasks$: Observable<any>;
   binding: string;
-  mark = true;
-  daysInMonth: number[];
-  currentDay = +this.calendarService.moment.format('D');
-  currentDate = this.calendarService.moment.format('MMMM YYYY');
-  newDate: string;
+  momentsInCurrentMonth: moment.Moment[];
+  currentMoment = moment();
 
   constructor(
     private authService: AuthService,
@@ -46,46 +44,24 @@ export class CalendarComponent implements OnInit {
       ),
       untilDestroyed(this)
     );
-    this.setDaysInMonth();
-    this.markCurrentDay();
+    this.setMomentsInMonth();
   }
 
-  setDaysInMonth(): void {
+  setMomentsInMonth(): void {
     this.calendarService.getCurrentDaysInMonth()
       .pipe(untilDestroyed(this))
       .subscribe(
         (days: number) => {
-          this.daysInMonth = [];
+          this.momentsInCurrentMonth = [];
           for (let i = 0; i < days; i++) {
-            this.daysInMonth.push(i + 1);
+            this.momentsInCurrentMonth.push(this.calendarService.moment);
           }
         }
       );
   }
 
-  markCurrentDay(): void {
-    this.calendarService.currentDate$
-      .pipe(untilDestroyed(this))
-      .subscribe(
-        (moment: moment.Moment) => {
-          this.newDate = moment.format('MMMM YYYY');
-          if (this.newDate === this.currentDate) {
-            this.mark = true;
-            return;
-          }
-          this.mark = false;
-        });
-
-  }
-
-  onOpenCalendarTile(day: number): void {
-    // this.calendarService.getCurrentDate()
-    //   .pipe(untilDestroyed(this))
-    //   .subscribe(
-    //     (currentDate: string) => {
-    //       console.log(day, currentDate);
-    //     }
-    //   )
+  openCurrentDay(clickedMoment: moment.Moment): void {
+    console.log(clickedMoment.format('D MMMM YYYY'));
   }
 
   logout(): void {
