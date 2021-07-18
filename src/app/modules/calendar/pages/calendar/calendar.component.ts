@@ -21,8 +21,8 @@ export class CalendarComponent implements OnInit {
   user$: Observable<User> = this.authService.user$;
   tasks$: Observable<any>;
   binding: string;
-  momentsInCurrentMonth: moment.Moment[];
-  currentMoment = moment();
+  today = this.calendarService.today;
+  daysInCurrentMonth$ = this.calendarService.getDaysInCurrentMonth();
 
   constructor(
     private authService: AuthService,
@@ -41,27 +41,12 @@ export class CalendarComponent implements OnInit {
           }
           return this.dataStorageService.getTasks(user);
         }
-      ),
-      untilDestroyed(this)
+      )
     );
-    this.setMomentsInMonth();
   }
 
-  setMomentsInMonth(): void {
-    this.calendarService.getCurrentDaysInMonth()
-      .pipe(untilDestroyed(this))
-      .subscribe(
-        (days: number) => {
-          this.momentsInCurrentMonth = [];
-          for (let i = 0; i < days; i++) {
-            this.momentsInCurrentMonth.push(this.calendarService.moment);
-          }
-        }
-      );
-  }
-
-  openCurrentDay(clickedMoment: moment.Moment): void {
-    console.log(clickedMoment.format('D MMMM YYYY'));
+  openCurrentDay(currentDay: moment.Moment): void {
+    this.calendarService.onOpenDayDetails(true, currentDay.format('D MMMM YYYY'));
   }
 
   logout(): void {

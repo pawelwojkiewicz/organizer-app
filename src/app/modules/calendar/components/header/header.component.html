@@ -1,7 +1,9 @@
 <div class="row justify-content-between">
-  <button (click)="onPreviousMonth()"
-          class="btn btn-primary">Previous month</button>
-  <h2>{{currentDate$ | async}}</h2>
-  <button (click)="onNextMonth()"
-          class="btn btn-primary">Next month</button>
+  <p-button type="submit"
+            class="registration__button"
+            (click)="onPreviousMonth()"> Previous month </p-button>
+  <h2>{{(currentDate$ | async).format('MMMM YYYY')}}</h2>
+  <p-button type="submit"
+            class="registration__button"
+            (click)="onNextMonth()"> Next month </p-button>
 </div>

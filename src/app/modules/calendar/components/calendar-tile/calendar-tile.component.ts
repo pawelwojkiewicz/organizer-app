@@ -6,16 +6,7 @@ import * as moment from 'moment';
   styleUrls: ['./calendar-tile.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class CalendarTileComponent implements OnInit {
-  @Input() moment: moment.Moment;
-  currentMoment = moment();
-  constructor(
-  ) { }
-
-  ngOnInit(): void {
-  }
-
-  openCurrentDay(moment) {
-    console.log(moment)
-  }
+export class CalendarTileComponent {
+  @Input() day: moment.Moment;
+  constructor() { }
 }

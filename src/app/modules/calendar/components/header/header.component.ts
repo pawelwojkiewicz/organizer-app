@@ -10,7 +10,7 @@ import { untilDestroyed, UntilDestroy } from '@ngneat/until-destroy';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HeaderComponent {
-  currentDate$ = this.calendarService.getCurrentDate();
+  currentDate$ = this.calendarService.currentDate$;
 
   constructor(
     private calendarService: CalendarService

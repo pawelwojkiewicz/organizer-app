@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import * as moment from 'moment';
 import { map } from 'rxjs/operators';
 
@@ -9,10 +9,19 @@ import { map } from 'rxjs/operators';
 export class CalendarService {
 
   moment = moment();
+  daysInMonth = [];
   private currentDate = new BehaviorSubject<moment.Moment>(this.moment);
+  private openDayDetails = new BehaviorSubject<boolean>(false);
+  private openedDay = new Subject<string>();
   currentDate$ = this.currentDate.asObservable();
+  openDayDetails$ = this.openDayDetails.asObservable();
+  openedDay$ = this.openedDay.asObservable();
 
   constructor() { }
+
+  get today(): moment.Moment {
+    return moment();
+  }
 
   onNextMonth(): void {
     this.currentDate.next(this.moment.add(1, 'M'));
@@ -22,22 +31,22 @@ export class CalendarService {
     this.currentDate.next(this.moment.subtract(1, 'M'));
   }
 
-  getCurrentDate(): Observable<string> {
+  getDaysInCurrentMonth(): Observable<moment.Moment[]> {
     return this.currentDate$
       .pipe(
-        map(el => el.format('MMMM YYYY'))
+        map(el => {
+          this.daysInMonth = [];
+          for (let i = 0; i < el.daysInMonth(); i++) {
+            this.daysInMonth.push(this.moment);
+          }
+          return this.daysInMonth;
+        })
       );
   }
-  getCurrentDaysInMonth(): Observable<number> {
-    return this.currentDate$
-      .pipe(
-        map(el => el.daysInMonth())
-      );
-  }
-  getCurrentDay(): Observable<string> {
-    return this.currentDate$
-      .pipe(
-        map(el => el.format('D'))
-      );
+  onOpenDayDetails(value: boolean, day?: string): void {
+    this.openDayDetails.next(value);
+    this.openedDay.next(day);
   }
 }
+
+
