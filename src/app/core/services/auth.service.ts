@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { Observable, throwError, Subject, BehaviorSubject } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { Observable, BehaviorSubject } from 'rxjs';
 import { RegistrationUser } from 'src/app/shared/types/registration-user.type';
-import { delay, catchError, tap } from 'rxjs/operators';
+import { tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { LoginUser } from 'src/app/shared/types/login-user.type';
 import { User } from 'src/app/shared/models/user.model';

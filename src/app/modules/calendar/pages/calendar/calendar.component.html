@@ -1,10 +1,10 @@
-<div *ngIf="user$ | async as user">
-  <p>{{user.email}}</p>
-  <input [(ngModel)]="binding">
-  <button (click)="addTask(user)">add</button>
-  <div *ngIf="tasks$ | async as tasks">
-    <h3>tasks:</h3>
-    <p>{{tasks.task}}</p>
+<div class="container mt-5">
+  <app-header></app-header>
+  <div class="calendar d-flex flex-wrap mt-5">
+    <app-calendar-tile [day]="day.set('date',i+1)"
+                       (click)="openCurrentDay(day.date(i+1))"
+                       [ngClass]="{'calendar-tile__current': day.diff(today) === 0}"
+                       *ngFor="let day of (daysInCurrentMonth$ |async); let i=index;"> </app-calendar-tile>
+    <app-calendar-dialog></app-calendar-dialog>
   </div>
-  <button (click)="logout()">logout</button>
 </div>

@@ -6,6 +6,8 @@ import { Observable, EMPTY } from 'rxjs';
 import { untilDestroyed, UntilDestroy } from '@ngneat/until-destroy';
 import { MessageService } from 'primeng/api';
 import { switchMap } from 'rxjs/operators';
+import { CalendarService } from 'src/app/modules/calendar/calendar.service';
+import * as moment from 'moment';
 
 @UntilDestroy()
 @Component({
@@ -19,16 +21,18 @@ export class CalendarComponent implements OnInit {
   user$: Observable<User> = this.authService.user$;
   tasks$: Observable<any>;
   binding: string;
+  today = this.calendarService.today;
+  daysInCurrentMonth$ = this.calendarService.getDaysInCurrentMonth();
 
   constructor(
     private authService: AuthService,
     private dataStorageService: DataStorageService,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private calendarService: CalendarService,
   ) { }
 
   ngOnInit(): void {
     this.authService.autoLogin();
-
     this.tasks$ = this.user$.pipe(
       switchMap(
         (user: User) => {
@@ -37,16 +41,12 @@ export class CalendarComponent implements OnInit {
           }
           return this.dataStorageService.getTasks(user);
         }
-      ),
-      untilDestroyed(this)
+      )
     );
   }
 
-  addTask(user: User): void {
-    this.dataStorageService
-      .addTask(user, this.binding)
-      .pipe(untilDestroyed(this))
-      .subscribe();
+  openCurrentDay(currentDay: moment.Moment): void {
+    this.calendarService.onOpenDayDetails(true, currentDay.format('D MMMM YYYY'));
   }
 
   logout(): void {
