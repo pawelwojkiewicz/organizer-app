@@ -1,8 +1,8 @@
 <div class="container mt-5">
   <app-header></app-header>
   <div class="calendar d-flex flex-wrap mt-5">
-    <app-calendar-tile [day]="day.set('date',i+1)"
-                       (click)="openCurrentDay(day.date(i+1))"
+    <app-calendar-tile [day]="day"
+                       (click)="openCurrentDay(day)"
                        [ngClass]="{'calendar-tile__current': day.diff(today) === 0}"
                        *ngFor="let day of (daysInCurrentMonth$ |async); let i=index;"> </app-calendar-tile>
     <app-calendar-dialog></app-calendar-dialog>

@@ -1,22 +1,33 @@
-<p-dialog [header]="openedDay$ | async"
+<p-dialog [header]="openedDate$ | async"
           [visible]="openDayDetails$ | async"
           [modal]="true"
           [style]="{width: '50vw'}"
           [baseZIndex]="10000"
           [draggable]="false"
-          [resizable]="false">
-  <p class="p-m-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
-    et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-    commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-    pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est
-    laborum.</p>
-  <ng-template pTemplate="footer">
+          [resizable]="false"
+          [closable]="false"
+          (onShow)="showDayDetails()">
+  <button pButton
+          (click)="closeDayDetails()"
+          type="button"
+          icon="pi pi-times"
+          class="calendar-dialog__close-btn p-button-text p-button-rounded">
+  </button>
+  <form [formGroup]="tasksForm"
+        (ngSubmit)="saveDayDetails()">
+    <div formArrayName="tasks">
+      <i (click)="addTaskFormGroup()"
+         class="pi pi-plus"></i>
+      <div *ngFor="let task of taskControls; let i = index"
+           [formGroupName]="i"
+           class="d-flex align-items-center mb-3"> <input type="text"
+               pInputText
+               formControlName="task" />
+      </div>
+    </div>
     <p-button icon="pi pi-check"
-              (click)="saveDayDetails()"
+              type="submit"
               label="Save"
               class="p-button-text"></p-button>
-    <p-button icon="pi pi-times"
-              (click)="closeDayDetails()"
-              label="Cancel"></p-button>
-  </ng-template>
+  </form>
 </p-dialog>

@@ -1,9 +1,8 @@
 import { Component, OnInit, ChangeDetectionStrategy, Input, ChangeDetectorRef } from '@angular/core';
-import { UntilDestroy } from '@ngneat/until-destroy';
+import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { FormControl } from '@angular/forms';
-import { Subscription } from 'rxjs';
 
-@UntilDestroy({ checkProperties: true })
+@UntilDestroy()
 
 @Component({
   selector: 'app-validation',
@@ -16,12 +15,14 @@ export class ValidationComponent implements OnInit {
   @Input() control: FormControl;
   constructor(private changeDetector: ChangeDetectorRef) { }
 
-  controlSub: Subscription;
-
   ngOnInit(): void {
-    this.controlSub = this.control.statusChanges.subscribe(() => {
-      this.changeDetector.markForCheck();
-    });
+    this.control.statusChanges
+      .pipe(
+        untilDestroyed(this)
+      )
+      .subscribe(() => {
+        this.changeDetector.markForCheck();
+      });
   }
 
 }

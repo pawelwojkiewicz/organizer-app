@@ -2,12 +2,13 @@ import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { AuthService } from 'src/app/core/services/auth.service';
 import { User } from 'src/app/shared/models/user.model';
 import { DataStorageService } from 'src/app/core/services/data-storage.service';
-import { Observable, EMPTY } from 'rxjs';
+import { Observable, EMPTY, forkJoin, merge } from 'rxjs';
 import { untilDestroyed, UntilDestroy } from '@ngneat/until-destroy';
 import { MessageService } from 'primeng/api';
-import { switchMap } from 'rxjs/operators';
+import { switchMap, concatMap, map, take, tap } from 'rxjs/operators';
 import { CalendarService } from 'src/app/modules/calendar/calendar.service';
 import * as moment from 'moment';
+import { Task } from 'src/app/shared/types/task.type';
 
 @UntilDestroy()
 @Component({
@@ -19,34 +20,62 @@ import * as moment from 'moment';
 export class CalendarComponent implements OnInit {
 
   user$: Observable<User> = this.authService.user$;
-  tasks$: Observable<any>;
   binding: string;
   today = this.calendarService.today;
   daysInCurrentMonth$ = this.calendarService.getDaysInCurrentMonth();
+  tasks: {};
 
   constructor(
     private authService: AuthService,
-    private dataStorageService: DataStorageService,
     private messageService: MessageService,
     private calendarService: CalendarService,
+    private dataStorageService: DataStorageService
   ) { }
+
+
 
   ngOnInit(): void {
     this.authService.autoLogin();
-    this.tasks$ = this.user$.pipe(
-      switchMap(
-        (user: User) => {
-          if (!user) {
-            return EMPTY;
+    this.getCurrentMonthTasks();
+    this.daysInCurrentMonth$.subscribe(el => console.log(el));
+  }
+
+  getCurrentMonthTasks(): void {
+    this.dataStorageService.getCurrentMonthTasks()
+      .pipe(
+        tap(el => {
+          this.tasks = el;
+        }),
+        switchMap(
+          () => {
+            return this.calendarService.currentDate$
+              .pipe(
+                tap(
+                  (currentDate) => {
+                    const newMonthTasks = this.getKeyByValue(this.tasks, currentDate);
+                    this.calendarService.setNewMonthTasks(newMonthTasks);
+                    console.log(newMonthTasks);
+
+                  }
+                )
+              );
           }
-          return this.dataStorageService.getTasks(user);
-        }
-      )
-    );
+        ),
+      ).subscribe();
+  }
+
+  getKeyByValue(object, currentDate: moment.Moment) {
+    return Object.keys(object).
+      filter(key => key.includes(currentDate.format('MMMM-YYYY')))
+      .reduce((obj, key) => {
+        obj[key] = object[key];
+        return obj;
+      }, []);
   }
 
   openCurrentDay(currentDay: moment.Moment): void {
-    this.calendarService.onOpenDayDetails(true, currentDay.format('D MMMM YYYY'));
+    this.calendarService.onOpenDayDetails(true);
+    this.calendarService.onOpenDate(currentDay);
   }
 
   logout(): void {

@@ -26,11 +26,15 @@ export class RegistrationComponent implements OnInit {
 
   ngOnInit(): void {
     this.initRegisterForm();
-    this.registrationForm.valueChanges.pipe(debounceTime(300)).subscribe(
-      () => {
-        this.changeDetector.markForCheck();
-      }
-    );
+    this.registrationForm.valueChanges
+      .pipe(
+        debounceTime(300),
+        untilDestroyed(this))
+      .subscribe(
+        () => {
+          this.changeDetector.markForCheck();
+        }
+      );
   }
 
   initRegisterForm(): void {

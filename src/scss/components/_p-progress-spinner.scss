@@ -4,5 +4,5 @@ p-progressspinner {
   @include flex-center();
   @include square(100%);
   @include bg-opacity($color--black, 0.70);
-  z-index: $zindex-fixed;
+  z-index: 20000;
 }

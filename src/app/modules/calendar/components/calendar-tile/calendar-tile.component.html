@@ -1,1 +1,7 @@
-<div> {{day.format('D')}}</div>
+<div class="calendar-tile">
+  <div class="calendar-tile__date"> {{day.format('D')}} </div>
+  <ul class="calendar-tile__tasks">
+    <li *ngFor="let task of array"
+        class="calendar-tile__task">test</li>
+  </ul>
+</div>

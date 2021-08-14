@@ -1,21 +1,23 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, Subject } from 'rxjs';
+import { BehaviorSubject, Observable, ReplaySubject, Subject } from 'rxjs';
 import * as moment from 'moment';
 import { map } from 'rxjs/operators';
+import { Task } from 'src/app/shared/types/task.type';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CalendarService {
 
-  moment = moment();
   daysInMonth = [];
-  private currentDate = new BehaviorSubject<moment.Moment>(this.moment);
+  private currentDate = new BehaviorSubject<moment.Moment>(moment());
   private openDayDetails = new BehaviorSubject<boolean>(false);
-  private openedDay = new Subject<string>();
+  private openedDate = new ReplaySubject<moment.Moment>(1);
+  private newMonthTasks = new Subject<{}>();
   currentDate$ = this.currentDate.asObservable();
   openDayDetails$ = this.openDayDetails.asObservable();
-  openedDay$ = this.openedDay.asObservable();
+  openedDate$ = this.openedDate.asObservable();
+  newMonthtasks$ = this.newMonthTasks.asObservable();
 
   constructor() { }
 
@@ -24,11 +26,15 @@ export class CalendarService {
   }
 
   onNextMonth(): void {
-    this.currentDate.next(this.moment.add(1, 'M'));
+    this.currentDate.next(this.currentDate.value.add(1, 'M'));
   }
 
   onPrevMonth(): void {
-    this.currentDate.next(this.moment.subtract(1, 'M'));
+    this.currentDate.next(this.currentDate.value.subtract(1, 'M'));
+  }
+
+  setNewMonthTasks(task: {}): void {
+    this.newMonthTasks.next(task);
   }
 
   getDaysInCurrentMonth(): Observable<moment.Moment[]> {
@@ -37,15 +43,19 @@ export class CalendarService {
         map(el => {
           this.daysInMonth = [];
           for (let i = 0; i < el.daysInMonth(); i++) {
-            this.daysInMonth.push(this.moment);
+            this.daysInMonth.push(this.currentDate.value.clone().date(i + 1));
           }
           return this.daysInMonth;
         })
       );
   }
-  onOpenDayDetails(value: boolean, day?: string): void {
+
+  onOpenDayDetails(value: boolean): void {
     this.openDayDetails.next(value);
-    this.openedDay.next(day);
+  }
+
+  onOpenDate(day: moment.Moment): void {
+    this.openedDate.next(day);
   }
 }
 
